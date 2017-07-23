@@ -23,6 +23,9 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
+// 引入部分公用样式(包括mixin方法)
+@import '~assets/less/common.less';
+
 
 </style>

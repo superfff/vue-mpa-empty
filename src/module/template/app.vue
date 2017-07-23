@@ -1,6 +1,6 @@
 <template>
     <div class="top">
-        <div class="one">111</div>
+        <div class="one"><span class="arrow"></span></div>
         <div class="two"><p>123</p><span>456</span></div>
         <div class="three">
             <com-button></com-button>
@@ -45,7 +45,9 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
+    @import '~assets/less/common.less';
+
     .top{
         width: 100%;
         height: 300px;
@@ -58,6 +60,9 @@ export default {
 
         .one{
             background-color: pink;
+            .arrow{
+                .arrow(5px);
+            }
         }
         .two{
             background-color: brown;

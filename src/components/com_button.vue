@@ -1,6 +1,7 @@
 <template>
     <div>
         <button @click="aa">111</button>
+        <p></p>
     </div>
 </template>
 
@@ -25,6 +26,10 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
+    @import '~assets/less/common.less';
 
+    p{
+        .arrow(5px);
+    }
 </style>

@@ -12,3 +12,18 @@
 		color: gray;
 	}
 }
+
+
+.arrow(@px){
+	display: inline-block;
+	font-size: 0;
+	&:after{
+		content: '';
+		display: inline-block;
+		border-top: @px solid red;
+		border-bottom: @px solid transparent;
+		border-right: @px solid transparent;
+		border-left: @px solid transparent;
+
+	}
+}

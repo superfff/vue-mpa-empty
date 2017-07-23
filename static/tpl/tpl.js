@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 
 // Vue.config.productionTip = false
+//页面引入全局reset样式
+import 'assets/less/reset.css';
 
 /* eslint-disable no-new */
 new Vue({
