@@ -1,12 +1,22 @@
+// 生产环境中webpack的配置入口
 var path = require('path')
 var utils = require('./utils')
 var webpack = require('webpack')
 var config = require('../config')
+
+// webpack 配置合并插件
 var merge = require('webpack-merge')
+// 基本配置文件
 var baseWebpackConfig = require('./webpack.base.conf')
+// webpack 复制文件和文件夹的插件
+// https://github.com/kevlened/copy-webpack-plugin
 var CopyWebpackPlugin = require('copy-webpack-plugin')
+// 自动生成 html 并且注入到 .html 文件中的插件
+// https://github.com/ampedandwired/html-webpack-plugin
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+// webpack 优化压缩和优化 css 的插件
+// https://github.com/NMFR/optimize-css-assets-webpack-plugin
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 //fgh+ 打包后的配置
@@ -23,6 +33,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       extract: true
     })
   },
+  // 检测生产环境下是否生成source map
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
@@ -34,6 +45,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+
+    // 压缩 js
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
@@ -46,6 +59,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
+
+    // 删除重复的css内容
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
         safe: true
@@ -75,12 +90,12 @@ var webpackConfig = merge(baseWebpackConfig, {
     // }),
 
 
-
-    // split vendor js into its own file
+    // 分割公共 js 到独立的文件
+    // https://webpack.js.org/guides/code-splitting-libraries/#commonschunkplugin
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
+        // node_modules中的任何所需模块都提取到vendor(在package.json中的dependencies部分)
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
@@ -92,11 +107,13 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
+    // 将webpack runtime 和模块清单 提取到独立的文件，以防止当 app包更新时导致公共 jsd hash也更新
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
     }),
-    // copy custom static assets
+    // 复制静态资源
+    // https://github.com/kevlened/copy-webpack-plugin
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -164,12 +181,14 @@ for (var pathname in pages){
 }
 
 
-
-
-
+// 开启 gzip 的情况时，给 webpack plugins添加 compression-webpack-plugin 插件
 if (config.build.productionGzip) {
+  // webpack 压缩插件
+  // https://github.com/webpack-contrib/compression-webpack-plugin
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
+
+  // 向webpackconfig.plugins中加入下方的插件
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',
@@ -185,6 +204,8 @@ if (config.build.productionGzip) {
   )
 }
 
+// 开启包分析的情况时， 给 webpack plugins添加 webpack-bundle-analyzer 插件
+// https://github.com/th0r/webpack-bundle-analyzer
 if (config.build.bundleAnalyzerReport) {
   var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())

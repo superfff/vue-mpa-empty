@@ -1,7 +1,9 @@
 var path = require('path')
 var config = require('../config')
+// css抽取插件
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
+// 生成资源文件的路径
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
     ? config.build.assetsSubDirectory
@@ -9,6 +11,7 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
+// 生成处理css-loader的配置 (根据options.extract进行启动css抽取的标识)
 exports.cssLoaders = function (options) {
   options = options || {}
 
@@ -37,7 +40,9 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: 'vue-style-loader',
+        /* build生产包时,静态文件夹的路径需要调整 */
+        publicPath: '../../../'
       })
     } else {
       return ['vue-style-loader'].concat(loaders)
